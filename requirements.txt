@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+langgraph
+langchain
+langchain-groq
+groq
+tavily-python
+redis
+pydantic
+python-dotenv
+pytest
