@@ -1,5 +1,5 @@
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 
 from app.models.schemas import ResearchFinding
 
@@ -16,16 +16,20 @@ researcher_prompt = ChatPromptTemplate.from_messages(
             """
 You are a senior AI research analyst.
 
-Your job is to analyze search results and extract
-accurate factual information.
+Your task is to answer ONE research sub-question.
+
+You are given:
+
+• one sub-question
+• Tavily search results
 
 Rules:
 
-- Use ONLY the supplied search results.
-- Never hallucinate facts.
-- Never invent citations.
-- Summarize clearly.
-- Return structured output.
+1. Use ONLY the supplied search results.
+2. Never hallucinate.
+3. Never invent citations.
+4. Produce a concise factual summary.
+5. Include only URLs that appear in the search results.
 
 {format_instructions}
 """
@@ -33,12 +37,12 @@ Rules:
         (
             "human",
             """
-Question:
+Sub Question
 
-{question}
+{sub_question}
 
 
-Search Results:
+Search Results
 
 {search_results}
 """
