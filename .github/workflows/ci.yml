@@ -10,13 +10,10 @@ on:
       - main
 
 jobs:
-
   test:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -31,6 +28,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Tests
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          REDIS_URL: redis://localhost:6379
         run: |
           pytest
 
