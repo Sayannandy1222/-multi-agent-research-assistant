@@ -1,23 +1,16 @@
-from app.workflows.research_graph import research_graph
+from fastapi.testclient import TestClient
+
+from app.main import app
+
+client = TestClient(app)
 
 
-def main():
-
-    result = research_graph.invoke(
-        {
-            "question": "Compare OpenAI and Anthropic pricing.",
-            "plan": None,
-            "findings": [],
-            "report": "",
-        }
-    )
-
-    print()
-
-    print("=" * 60)
-
-    print(result["report"])
+def test_root():
+    response = client.get("/")
+    assert response.status_code == 200
 
 
-if __name__ == "__main__":
-    main()
+def test_health():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"
