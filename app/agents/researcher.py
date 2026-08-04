@@ -11,8 +11,9 @@ class ResearcherAgent:
     Research Agent
 
     Receives one sub-question,
-    searches the web,
-    produces structured findings.
+    searches Tavily,
+    extracts useful information,
+   and generates a structured finding.
     """
 
     def __init__(self):
@@ -36,14 +37,26 @@ class ResearcherAgent:
         sub_question: str,
     ) -> ResearchFinding:
 
-        search_results = self.search.search(
+        response = self.search.search(
             query=sub_question,
-            max_results=5,
+            max_results=3,
         )
+
+        cleaned_results = []
+
+        for result in response.get("results", []):
+
+            cleaned_results.append(
+                {
+                    "title": result.get("title", ""),
+                    "content": result.get("content", "")[:400],
+                    "url": result.get("url", ""),
+                }
+            )
 
         return self.chain.invoke(
             {
                 "sub_question": sub_question,
-                "search_results": str(search_results),
+                "search_results": cleaned_results,
             }
         )

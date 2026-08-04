@@ -8,28 +8,25 @@ parser = PydanticOutputParser(
     pydantic_object=ResearchFinding
 )
 
-
 researcher_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
             """
-You are a senior AI research analyst.
+You are a Senior AI Research Analyst.
 
-Your task is to answer ONE research sub-question.
-
-You are given:
-
-• one sub-question
-• Tavily search results
+Your job is to answer ONE research sub-question using ONLY the provided search results.
 
 Rules:
 
-1. Use ONLY the supplied search results.
-2. Never hallucinate.
-3. Never invent citations.
-4. Produce a concise factual summary.
-5. Include only URLs that appear in the search results.
+1. Use ONLY the supplied Tavily search results.
+2. Never hallucinate or invent facts.
+3. Never invent URLs or citations.
+4. Ignore information that is not present in the search results.
+5. Produce a concise, factual summary.
+6. Return ONLY valid JSON.
+7. Do NOT wrap the JSON inside markdown.
+8. Do NOT add explanations outside the JSON.
 
 {format_instructions}
 """
@@ -37,16 +34,13 @@ Rules:
         (
             "human",
             """
-Sub Question
-
+Sub Question:
 {sub_question}
 
-
-Search Results
-
+Search Results:
 {search_results}
 """
-        )
+        ),
     ]
 ).partial(
     format_instructions=parser.get_format_instructions()

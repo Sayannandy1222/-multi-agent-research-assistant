@@ -16,7 +16,7 @@ class TavilySearchTool:
     def search(
         self,
         query: str,
-        max_results: int = 5,
+        max_results: int = 3,
     ):
         """
         Search the web using Tavily.
